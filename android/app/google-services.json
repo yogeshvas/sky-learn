@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "528514269824",
+    "project_id": "sky-learn-99325",
+    "storage_bucket": "sky-learn-99325.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528514269824:android:8fcbae3a777bb2e0765c65",
+        "android_client_info": {
+          "package_name": "com.skylearn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmUB86lTPZKJrtz79wqhd6D8WhBL_2xxM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
