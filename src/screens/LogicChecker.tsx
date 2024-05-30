@@ -18,9 +18,9 @@ const LoginChecker = ({navigation}: any) => {
   useEffect(() => {
     if (!isInitialRender.current) {
       if (!user) {
-        navigation.navigate('login');
+        navigation.replace('login');
       } else {
-        navigation.navigate('HomeTabs');
+        navigation.replace('HomeTabs');
       }
     }
   }, [user]);

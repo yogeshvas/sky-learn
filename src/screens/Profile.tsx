@@ -16,7 +16,7 @@ const Profile = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <TouchableOpacity onPress={signOut}>
-        <Text>Logout</Text>
+        <Text style={{color: 'black'}}>Logout</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

@@ -8,37 +8,79 @@ import {
   View,
   TextInput,
   Platform,
-  Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
+import Toast from 'react-native-toast-message';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const Register = ({navigation}: any) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(false); // Add error state
-
+  const [error, setError] = useState(false);
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '528514269824-5vm1fi2jr6ogholjft8vnmdms9nh33l9.apps.googleusercontent.com',
+    });
+  });
   const handleEmailPassRegister = () => {
     if (!email || !password) {
-      // Check if email or password is empty
-      setError(true); // Set error state to true
-      return; // Return without registering if there's an error
+      setError(true);
+      return;
     }
 
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(async res => {
         console.log(res);
-        Alert.alert('Registered Successfully');
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'You have been registered successfully.  👋',
+          text1Style: {fontFamily: 'Poppins-SemiBold'},
+          text2Style: {fontFamily: 'Poppins-Bold'},
+          position: 'bottom',
+          bottomOffset: 20,
+        });
         navigation.navigate('HomeTabs');
       })
       .catch(err => {
         console.log(err);
-        Alert.alert(err.nativeErrorMessage);
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: err.message,
+          text1Style: {fontFamily: 'Poppins-SemiBold'},
+          text2Style: {fontFamily: 'Poppins-Bold'},
+          position: 'bottom',
+          bottomOffset: 20,
+        });
       });
   };
+  async function onGoogleButtonPress() {
+    // Check if your device supports Google Play
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+    // Get the users ID token
+    const {idToken} = await GoogleSignin.signIn();
+
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    Toast.show({
+      type: 'success',
+      text1: 'Success',
+      text2: 'You have successfully registered 👋',
+      text1Style: {fontFamily: 'Poppins-SemiBold'},
+      text2Style: {fontFamily: 'Poppins-Bold'},
+      position: 'bottom',
+      bottomOffset: 20,
+    });
+    navigation.navigate('HomeTabs');
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -114,7 +156,7 @@ const Register = ({navigation}: any) => {
               )}
             </TouchableOpacity>
           </View>
-          {error && ( // Conditional rendering for error message
+          {error && (
             <View style={{alignItems: 'center', marginTop: 10}}>
               <Text style={{fontFamily: 'Poppins-Regular', color: 'red'}}>
                 * Please fill all the fields.
@@ -142,7 +184,7 @@ const Register = ({navigation}: any) => {
             </Text>
           </View>
           <View style={{alignItems: 'center', marginTop: 10}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onGoogleButtonPress}>
               <Image
                 style={{height: 40, width: 40}}
                 source={require('../assets/images/google-icon.png')}
@@ -157,11 +199,13 @@ const Register = ({navigation}: any) => {
               alignItems: 'center',
               gap: 3,
             }}>
-            <Text style={{fontFamily: 'Poppins-Medium'}}>
+            <Text style={{fontFamily: 'Poppins-Medium', color: 'gray'}}>
               Already have an account?
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('login')}>
-              <Text style={{fontFamily: 'Poppins-Bold'}}>Login</Text>
+              <Text style={{fontFamily: 'Poppins-Bold', color: 'gray'}}>
+                Login
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -195,7 +239,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
   },
-
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -212,6 +255,7 @@ const styles = StyleSheet.create({
     height: 42,
     flex: 1,
     paddingHorizontal: 20,
+    color: 'black',
     borderRadius: 5,
     fontFamily: 'Poppins-Regular',
   },

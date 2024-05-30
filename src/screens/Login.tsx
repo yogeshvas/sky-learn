@@ -14,6 +14,7 @@ import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import Toast from 'react-native-toast-message';
 const Login = ({navigation}: any) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -29,12 +30,28 @@ const Login = ({navigation}: any) => {
           // Make the callback async
           console.log(res);
 
-          Alert.alert('Logged In Successfully');
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'You have successfully Logged In 👋',
+            text1Style: {fontFamily: 'Poppins-SemiBold'},
+            text2Style: {fontFamily: 'Poppins-Bold'},
+            position: 'bottom',
+            bottomOffset: 20,
+          });
           navigation.navigate('HomeTabs');
         })
         .catch(err => {
-          console.log(err);
-          Alert.alert(err.nativeErrorMessage);
+          console.log(err.message);
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: err.message,
+            text1Style: {fontFamily: 'Poppins-SemiBold'},
+            text2Style: {fontFamily: 'Poppins-Bold'},
+            position: 'bottom',
+            bottomOffset: 20,
+          });
         });
     }
   };
@@ -54,6 +71,15 @@ const Login = ({navigation}: any) => {
 
     // Create a Google credential with the token
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    Toast.show({
+      type: 'success',
+      text1: 'Success',
+      text2: 'You have successfully Logged In 👋',
+      text1Style: {fontFamily: 'Poppins-SemiBold'},
+      text2Style: {fontFamily: 'Poppins-Bold'},
+      position: 'bottom',
+      bottomOffset: 20,
+    });
     navigation.navigate('HomeTabs');
     // Sign-in the user with the credential
     return auth().signInWithCredential(googleCredential);
@@ -164,11 +190,13 @@ const Login = ({navigation}: any) => {
               alignItems: 'center',
               gap: 3,
             }}>
-            <Text style={{fontFamily: 'Poppins-Medium'}}>
+            <Text style={{fontFamily: 'Poppins-Medium', color: 'gray'}}>
               Don't have an account?
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('register')}>
-              <Text style={{fontFamily: 'Poppins-Bold'}}>Register</Text>
+              <Text style={{fontFamily: 'Poppins-Bold', color: 'gray'}}>
+                Register
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -217,6 +245,7 @@ const styles = StyleSheet.create({
   passwordInput: {
     justifyContent: 'center',
     alignItems: 'center',
+    color: 'black',
     height: 42,
     flex: 1,
     paddingHorizontal: 20,
