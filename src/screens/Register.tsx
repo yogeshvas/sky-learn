@@ -8,14 +8,37 @@ import {
   View,
   TextInput,
   Platform,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import auth from '@react-native-firebase/auth';
 
 const Register = ({navigation}: any) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(false); // Add error state
+
+  const handleEmailPassRegister = () => {
+    if (!email || !password) {
+      // Check if email or password is empty
+      setError(true); // Set error state to true
+      return; // Return without registering if there's an error
+    }
+
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(async res => {
+        console.log(res);
+        Alert.alert('Registered Successfully');
+        navigation.navigate('HomeTabs');
+      })
+      .catch(err => {
+        console.log(err);
+        Alert.alert(err.nativeErrorMessage);
+      });
+  };
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -33,15 +56,25 @@ const Register = ({navigation}: any) => {
             />
           </View>
           <View style={styles.passwordContainer}>
+            <View>
+              <Image
+                style={{width: 22, height: 22, opacity: 0.5}}
+                source={require('../assets/images/retro.png')}
+              />
+            </View>
             <TextInput
-              value={email}
-              onChangeText={t => setEmail(t)}
               style={styles.passwordInput}
               placeholder="Name"
               placeholderTextColor="gray"
             />
           </View>
           <View style={styles.passwordContainer}>
+            <View>
+              <Image
+                style={{width: 20, height: 20, opacity: 0.5}}
+                source={require('../assets/images/email.png')}
+              />
+            </View>
             <TextInput
               value={email}
               onChangeText={t => setEmail(t)}
@@ -51,6 +84,12 @@ const Register = ({navigation}: any) => {
             />
           </View>
           <View style={styles.passwordContainer}>
+            <View>
+              <Image
+                style={{width: 20, height: 20, opacity: 0.5}}
+                source={require('../assets/images/key.png')}
+              />
+            </View>
             <TextInput
               value={password}
               onChangeText={t => setPassword(t)}
@@ -75,7 +114,16 @@ const Register = ({navigation}: any) => {
               )}
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={{alignItems: 'center', marginTop: 20}}>
+          {error && ( // Conditional rendering for error message
+            <View style={{alignItems: 'center', marginTop: 10}}>
+              <Text style={{fontFamily: 'Poppins-Regular', color: 'red'}}>
+                * Please fill all the fields.
+              </Text>
+            </View>
+          )}
+          <TouchableOpacity
+            style={{alignItems: 'center', marginTop: 20}}
+            onPress={handleEmailPassRegister}>
             <Text
               style={{
                 backgroundColor: '#401F71',
@@ -157,6 +205,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 20,
     marginHorizontal: 30,
+    paddingHorizontal: 12,
   },
   passwordInput: {
     justifyContent: 'center',

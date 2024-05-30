@@ -8,14 +8,56 @@ import {
   View,
   TextInput,
   Platform,
+  Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
+import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 const Login = ({navigation}: any) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+  const handleEmailPassLogin = () => {
+    if (!email || !password) {
+      setError(true);
+    } else {
+      auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(async res => {
+          // Make the callback async
+          console.log(res);
+
+          Alert.alert('Logged In Successfully');
+          navigation.navigate('HomeTabs');
+        })
+        .catch(err => {
+          console.log(err);
+          Alert.alert(err.nativeErrorMessage);
+        });
+    }
+  };
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '528514269824-5vm1fi2jr6ogholjft8vnmdms9nh33l9.apps.googleusercontent.com',
+    });
+  });
+
+  async function onGoogleButtonPress() {
+    // Check if your device supports Google Play
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+    // Get the users ID token
+    const {idToken} = await GoogleSignin.signIn();
+
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    navigation.navigate('HomeTabs');
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -36,7 +78,7 @@ const Login = ({navigation}: any) => {
           <View style={styles.passwordContainer}>
             <View>
               <Image
-                style={{width: 20, height: 20}}
+                style={{width: 20, height: 20, opacity: 0.5}}
                 source={require('../assets/images/email.png')}
               />
             </View>
@@ -49,6 +91,12 @@ const Login = ({navigation}: any) => {
             />
           </View>
           <View style={styles.passwordContainer}>
+            <View>
+              <Image
+                style={{width: 20, height: 20, opacity: 0.5}}
+                source={require('../assets/images/key.png')}
+              />
+            </View>
             <TextInput
               value={password}
               onChangeText={t => setPassword(t)}
@@ -73,7 +121,16 @@ const Login = ({navigation}: any) => {
               )}
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={{alignItems: 'center', marginTop: 20}}>
+          {error && (
+            <View style={{alignItems: 'center', marginTop: 10}}>
+              <Text style={{fontFamily: 'Poppins-Regular', color: 'red'}}>
+                * Please fill all the feilds.
+              </Text>
+            </View>
+          )}
+          <TouchableOpacity
+            style={{alignItems: 'center', marginTop: 10}}
+            onPress={handleEmailPassLogin}>
             <Text
               style={{
                 backgroundColor: '#401F71',
@@ -92,7 +149,7 @@ const Login = ({navigation}: any) => {
             </Text>
           </View>
           <View style={{alignItems: 'center', marginTop: 10}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onGoogleButtonPress}>
               <Image
                 style={{height: 40, width: 40}}
                 source={require('../assets/images/google-icon.png')}
