@@ -3,11 +3,11 @@ import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-const Profile = () => {
+const Profile = ({navigation}: any) => {
   const signOut = async () => {
     try {
       await auth().signOut();
-
+      navigation.navigate('login');
       console.log('User signed out!');
     } catch (error) {
       console.error('Error signing out:', error);

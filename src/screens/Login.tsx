@@ -20,6 +20,7 @@ const Login = ({navigation}: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+
   const handleEmailPassLogin = () => {
     if (!email || !password) {
       setError(true);

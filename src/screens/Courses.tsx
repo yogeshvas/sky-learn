@@ -5,39 +5,38 @@ import {
   StyleSheet,
   Text,
   View,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-const Courses = () => {
+const Courses = ({navigation}: any) => {
   const [announcement, setAnnoucement] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    const fetchAnnoucement = async () => {
+  const fetchAnnoucement = async () => {
+    setRefreshing(true);
+    try {
       const user = await firestore()
         .collection('announcement')
         .doc('dM5ArhhO865mvf9hNdyt')
         .get();
 
       setAnnoucement(user._data.announce);
-    };
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
     fetchAnnoucement();
   }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-      {/* <Text>Hiome</Text>
-      <TouchableOpacity onPress={signOut}>
-        <Text>LogOut</Text>
-      </TouchableOpacity> */}
-      {/* <View style={{paddingHorizontal: 20, marginTop: 20}}>
-        <Image
-          style={{width: 40, height: 40}}
-          source={require('../assets/images/fire.png')}
-        />
-      </View> */}
       {/* badi view */}
       <View
         style={{
@@ -68,7 +67,6 @@ const Courses = () => {
           </Text>
         </View>
         {/* right view */}
-        {/* add the drop shadow in the below view */}
         <View style={styles.shadowContainer}>
           <Image
             style={{width: 80, height: 80}}
@@ -79,7 +77,13 @@ const Courses = () => {
       <View
         style={{backgroundColor: 'gray', height: 0.9, marginTop: 20}}></View>
 
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={fetchAnnoucement}
+          />
+        }>
         <View style={styles.announce}>
           <View style={{width: '30%'}}>
             <Image
@@ -116,29 +120,21 @@ const Courses = () => {
           <View
             style={{
               flexDirection: 'row',
-
               paddingHorizontal: 30,
               gap: 10,
               marginBottom: 20,
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}>
             {/* leetcode */}
-            <View
-              style={{
-                backgroundColor: '#6FB4F7',
-                padding: 30,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: 'black',
-                height: 190,
-                width: '50%',
-              }}>
+            <TouchableOpacity
+              style={styles.courseCardBlue}
+              onPress={() => navigation.navigate('leetcode')}>
               <Text
                 style={{
-                  fontFamily: 'Poppins-Medium',
+                  fontFamily: 'Poppins-SemiBold',
                   color: 'white',
                   textAlign: 'center',
-                  justifyContent: 'center',
-                  alignItems: 'center',
                 }}>
                 Leet Code
               </Text>
@@ -146,33 +142,24 @@ const Courses = () => {
                 style={{height: 100, width: 100}}
                 source={require('../assets/images/leetcode.png')}
               />
-            </View>
+            </TouchableOpacity>
             {/* webDev */}
-            <View
-              style={{
-                backgroundColor: '#FE7276',
-                padding: 30,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: 'black',
-                height: 190,
-                width: '50%',
-              }}>
+            <TouchableOpacity
+              style={styles.courseCardRed}
+              onPress={() => navigation.navigate('webdev')}>
               <Text
                 style={{
-                  fontFamily: 'Poppins-Medium',
+                  fontFamily: 'Poppins-SemiBold',
                   color: 'white',
                   textAlign: 'center',
-                  justifyContent: 'center',
-                  alignItems: 'center',
                 }}>
-                Web Development
+                Web Dev
               </Text>
               <Image
                 style={{height: 100, width: 100}}
                 source={require('../assets/images/webd.png')}
               />
-            </View>
+            </TouchableOpacity>
           </View>
           {/* row 2 view */}
           <View
@@ -182,59 +169,43 @@ const Courses = () => {
               paddingHorizontal: 30,
               gap: 10,
               marginBottom: 20,
+              alignItems: 'center',
             }}>
             {/* leetcode */}
-            <View
-              style={{
-                backgroundColor: '#FDAB5D',
-                padding: 30,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: 'black',
-                height: 190,
-                width: '50%',
-              }}>
+            <TouchableOpacity
+              style={styles.courseCardYellow}
+              onPress={() => navigation.navigate('go')}>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-SemiBold',
+                  color: 'white',
+                  textAlign: 'center',
+                }}>
+                Go Lang
+              </Text>
               <Image
                 style={{height: 100, width: 100}}
-                source={require('../assets/images/leetcode.png')}
+                source={require('../assets/images/golang.png')}
               />
-              <Text
-                style={{
-                  fontFamily: 'Poppins-Medium',
-                  color: 'white',
-                  textAlign: 'center',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                Leet Code
-              </Text>
-            </View>
+            </TouchableOpacity>
             {/* webDev */}
-            <View
-              style={{
-                backgroundColor: '#7C83FF',
-                padding: 30,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: 'black',
-                height: 190,
-                width: '50%',
-              }}>
+            <TouchableOpacity
+              style={styles.courseCardPurple}
+              onPress={() => navigation.navigate('misc')}>
               <Text
                 style={{
-                  fontFamily: 'Poppins-Medium',
+                  fontFamily: 'Poppins-SemiBold',
                   color: 'white',
                   textAlign: 'center',
-                  justifyContent: 'center',
-                  alignItems: 'center',
                 }}>
                 Miscellaneous
               </Text>
               <Image
                 style={{height: 100, width: 100}}
-                source={require('../assets/images/webd.png')}
+                source={require('../assets/images/misc.png')}
+                resizeMode="contain"
               />
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -272,5 +243,49 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 1.0,
     elevation: 1,
+  },
+  courseCardBlue: {
+    backgroundColor: '#6FB4F7',
+    padding: 30,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    height: 190,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  courseCardRed: {
+    backgroundColor: '#FE7276',
+    padding: 30,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    height: 190,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  courseCardYellow: {
+    backgroundColor: '#FDAB5D',
+    padding: 30,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    height: 190,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  courseCardPurple: {
+    backgroundColor: '#7C83FF',
+    padding: 30,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    height: 190,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

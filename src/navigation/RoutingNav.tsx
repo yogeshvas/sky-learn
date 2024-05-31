@@ -12,6 +12,11 @@ import {Image, View, Text} from 'react-native'; // Import Image, View, and Text 
 // Import your custom icon images
 import CoursesIcon from '../assets/images/courses.png';
 import ProfileIcon from '../assets/images/single.png';
+import LeetCode from '../screens/LeetCode';
+import VideoScreen from '../screens/VideoScreen';
+import WebDev from '../screens/WebDev';
+import GoLang from '../screens/GoLang';
+import Misc from '../screens/Misc';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -37,6 +42,31 @@ export function MyStack() {
       <Stack.Screen
         name="HomeTabs"
         component={HomeTabs}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="leetcode"
+        component={LeetCode}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="webdev"
+        component={WebDev}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="go"
+        component={GoLang}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="misc"
+        component={Misc}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="videos"
+        component={VideoScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
