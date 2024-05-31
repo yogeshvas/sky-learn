@@ -15,14 +15,30 @@ const VideoScreen = ({route, navigation}: any) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <View style={{paddingVertical: 10, marginBottom: 10}}>
-          <Image
-            style={{height: 40, width: 40}}
-            source={require('../assets/images/arrow-left.png')}
-          />
-        </View>
-      </TouchableOpacity>
+      <View
+        style={{
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'center',
+          padding: 10,
+        }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <View style={{paddingVertical: 10, marginBottom: 10}}>
+            <Image
+              style={{height: 40, width: 40}}
+              source={require('../assets/images/arrow-left.png')}
+            />
+          </View>
+        </TouchableOpacity>
+        <Text
+          style={{
+            color: 'black',
+            fontFamily: 'Poppins-SemiBold',
+            fontSize: 25,
+          }}>
+          video.
+        </Text>
+      </View>
       <View style={styles.videoContainer}>
         <View style={styles.videoWrapper}>
           <Video

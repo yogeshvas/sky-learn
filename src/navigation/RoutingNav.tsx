@@ -11,7 +11,7 @@ import {Image, View, Text} from 'react-native'; // Import Image, View, and Text 
 
 // Import your custom icon images
 import CoursesIcon from '../assets/images/courses.png';
-import ProfileIcon from '../assets/images/single.png';
+import ProfileIcon from '../assets/images/cogwheel.png';
 import LeetCode from '../screens/LeetCode';
 import VideoScreen from '../screens/VideoScreen';
 import WebDev from '../screens/WebDev';
@@ -96,7 +96,7 @@ function HomeTabs() {
           // Set the icon based on the route name
           if (route.name === 'Courses') {
             iconSource = CoursesIcon;
-          } else if (route.name === 'Profiles') {
+          } else if (route.name === 'Settings') {
             iconSource = ProfileIcon;
           }
 
@@ -127,7 +127,7 @@ function HomeTabs() {
         options={{headerShown: false}}
       />
       <Tab.Screen
-        name="Profiles"
+        name="Settings"
         component={Profile}
         options={{headerShown: false}}
       />

@@ -42,6 +42,15 @@ const LeetCode = ({navigation}: any) => {
           alignItems: 'center',
           padding: 20,
           marginVertical: 10,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+
+          elevation: 5,
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('HomeTabs')}>
           <Image
@@ -125,6 +134,15 @@ const LeetCode = ({navigation}: any) => {
                 flexDirection: 'row',
                 alignItems: 'center',
                 gap: 10,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+
+                elevation: 5,
               }}>
               <Image
                 style={{height: 20, width: 20}}
