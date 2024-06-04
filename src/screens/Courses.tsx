@@ -53,7 +53,7 @@ const Courses = ({navigation}: any) => {
                 fontSize: 25,
                 color: 'black',
               }}>
-              Hi Learner!
+              Hi Yogesh!
             </Text>
             <Image
               style={{width: 30, height: 30}}
